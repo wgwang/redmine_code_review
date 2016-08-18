@@ -1,7 +1,25 @@
 source 'http://rubygems.org'
+group :test, :development do
+    gem 'pry-rails'
+    gem 'pry-doc'
+    gem 'pry-stack_explorer'
+    gem 'pry-byebug'
+    gem 'better_errors'
+    gem 'binding_of_caller'
+
+    gem 'hirb'
+    gem 'hirb-unicode'
+
+    gem 'tapp'
+    gem 'awesome_print'
+    gem 'quiet_assets'
+    gem 'annotate', git: 'git://github.com/ctran/annotate_models.git'
+    gem 'timecop'
+end
 
 group :test do
   gem "simplecov-rcov"
   gem 'factory_girl_rails'
   gem 'shoulda'
+  gem 'database_rewinder'
 end

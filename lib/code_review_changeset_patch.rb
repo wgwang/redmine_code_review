@@ -100,7 +100,7 @@ module ChangesetInstanceMethodsCodeReview
   #
   # for assignment issues
   #
-  
+
   def assignment_count
     #return @assignment_count if @assignment_count
     @assignment_count = code_review_assignments.length
@@ -128,7 +128,7 @@ module ChangesetInstanceMethodsCodeReview
         @assignment_issues =  @assignment_issues + change.code_review_assignments.collect{|issue| issue}
     }
     @assignment_issues
-    
+
   end
 
   def open_assignments
@@ -176,5 +176,3 @@ module ChangesetInstanceMethodsCodeReview
     ret
   end
 end
-
-
