@@ -18,13 +18,15 @@
 require_dependency 'projects_helper'
 
 module CodeReviewProjectsHelperPatch
-  def project_settings_tabs
-    tabs = super
-    action = {:name => 'code_review', :controller => 'code_review_settings', :action => :show, :partial => 'code_review_settings/show', :label => :code_review}
+  module ProjectsHelperPatch
+    def project_settings_tabs
+      tabs = super
+      action = {:name => 'code_review', :controller => 'code_review_settings', :action => :show, :partial => 'code_review_settings/show', :label => :code_review}
 
-    tabs << action if User.current.allowed_to?(action, @project)
+      tabs << action if User.current.allowed_to?(action, @project)
 
-    tabs
+      tabs
+    end
   end
 end
 

@@ -43,6 +43,7 @@ class CodeReviewIssueHooks < Redmine::Hook::ViewListener
     parameters = request.parameters
     code = parameters[:code]
     return unless code
+    
     issue = context[:issue]
     o = ''
     o << hidden_field_tag("code[rev]", code[:rev]) unless code[:rev].blank?
@@ -54,6 +55,8 @@ class CodeReviewIssueHooks < Redmine::Hook::ViewListener
     o << hidden_field_tag("code[action_type]", code[:action_type]) unless code[:action_type].blank?
     o << "\n"
     o << hidden_field_tag("code[change_id]", code[:change_id].to_i) unless code[:change_id].blank?
+    o << "\n"
+    o << hidden_field_tag("code[repository_id]", code[:repository_id]) unless code[:repository_id].blank?
     o << "\n"
     o << hidden_field_tag("code[changeset_id]", code[:changeset_id].to_i) unless code[:changeset_id].blank?
     o << "\n"
@@ -71,7 +74,7 @@ class CodeReviewIssueHooks < Redmine::Hook::ViewListener
       return unless code
       issue = context[:issue]
       issue_id = issue.id
-
+      
       assignment = CodeReviewAssignment.new
       assignment.issue_id = issue_id
       assignment.change_id = code[:change_id].to_i unless code[:change_id].blank?
@@ -81,6 +84,8 @@ class CodeReviewIssueHooks < Redmine::Hook::ViewListener
       assignment.rev = code[:rev] unless code[:rev].blank?
       assignment.rev_to = code[:rev_to] unless code[:rev_to].blank?
       assignment.action_type = code[:action_type] unless code[:action_type].blank?
+      # assignment.repository = @project.repositories.find_by_identifier_param(code[:repository_id]) unless code[:repository_id].blank?
+      assignment.repository_id = code[:repository_id] unless code[:repository_id].blank?
       assignment.save!
     end
   end

@@ -101,6 +101,11 @@
         <%= select :issue, :fixed_version_id, (@issue.assignable_versions.collect {|v| [v.name, v.id]}), :include_blank => true, :selected => @default_version_id %>
       </p>
     <% end %>
+    
+      <p>
+  	<label><b><%=h l(:field_due_date) %></b></label>
+  	<%= date_field_tag :issue_due_date, :required => true %>
+      </p>
 
     <%
       @allowed_statuses = @issue.new_statuses_allowed_to(User.current)

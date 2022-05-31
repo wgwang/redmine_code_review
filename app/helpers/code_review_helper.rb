@@ -28,9 +28,9 @@ module CodeReviewHelper
     link = link_to(l(:button_add), {:controller => 'code_review',
                                     :action => 'assign', :id => project, :action_type => options[:action_type],
                                     :rev => options[:rev], :rev_to => options[:rev_to], :path => options[:path],
+                                    :repository_id => options[:repository_id],
                                     :change_id => options[:change_id], :attachment_id => options[:attachment_id],
                                     :changeset_id => options[:changeset_id]}, :class => 'icon icon-add')
-
     html << link if link
 
     html

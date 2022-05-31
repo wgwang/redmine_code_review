@@ -31,6 +31,8 @@ class CreateCodeReviewAssignments < ActiveRecord::Migration[4.2]
       t.column :rev_to, :string
 
       t.column :action_type, :string
+      
+      t.column :repository_id, :string
     end
   end
 

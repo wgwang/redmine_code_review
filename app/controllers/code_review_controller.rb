@@ -62,7 +62,6 @@ class CodeReviewController < ApplicationController
       CodeReview.transaction {
         @review = CodeReview.new
         @review.issue = Issue.new
-
         if params[:issue] and params[:issue][:tracker_id]
           @review.issue.tracker_id = params[:issue][:tracker_id].to_i
         else
@@ -75,6 +74,7 @@ class CodeReviewController < ApplicationController
         @review.user_id = @user.id
         @review.updated_by_id = @user.id
         @review.issue.start_date ||= Date.today if Setting.default_issue_start_date_to_creation_date?
+        @review.issue.due_date = params[:issue_due_date] unless params[:issue_due_date].blank?
         @review.action_type = params[:action_type]
         @review.rev = params[:rev] unless params[:rev].blank?
         @review.rev_to = params[:rev_to] unless params[:rev_to].blank?
@@ -186,6 +186,7 @@ class CodeReviewController < ApplicationController
     @path = params[:path] unless params[:path].blank?
     @paths = []
     @paths << @path unless @path.blank?
+    @repository_id = params['repository_id']
 
     @action_type = params[:action_type]
     changeset = @repository.find_changeset_by_name(@rev)
@@ -242,11 +243,16 @@ class CodeReviewController < ApplicationController
     @allowed_statuses = @review.issue.new_statuses_allowed_to(User.current) if @review
     target = @review if @review
     target = @assignment if @assignment
-    @repository_id = target.repository_identifier
+    @repository_id = target.repository_identifier if target
+    @repository_id ||= @assignment.repository_id if @assignment and not @repository_id 
     if request.xhr? || !params[:update].blank?
       render partial: 'show'
     elsif target.path
-      path = URI.decode_www_form(target.path)
+      begin
+      	path = URI.decode_www_form(target.path)
+      rescue ArgumentError
+	path = target.path
+      end
       action_name = target.action_type
       rev_to = ''
       rev_to = '&rev_to=' + target.rev_to if target.rev_to
